@@ -74,7 +74,7 @@ CREATE TABLE users (
 3. Configure o banco de dados MySQL e ajuste as credenciais no código.  
 4. Execute a aplicação:  
    ```bash
-   python app.py
+   python main.py
    ```
 5. Acesse os endpoints via **Postman** ou outro cliente REST.  
 
