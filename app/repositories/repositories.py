@@ -1,4 +1,6 @@
 from config import get_db_connection
+from app.models.models import User
+
 
 class UserRepository:
     @staticmethod
@@ -9,3 +11,13 @@ class UserRepository:
             cursor.execute(sql, (user.name, user.email, user.password))
             connection.commit()
         connection.close()
+
+    @staticmethod
+    def find_by_id(user_id):
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM users WHERE id = %s"
+            cursor.execute(sql, (user_id,))
+            row = cursor.fetchone()
+        connection.close()
+        return User(*row) if row else None
