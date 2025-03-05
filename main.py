@@ -15,6 +15,8 @@ def register():
     hashed_password = hashlib.sha256(data["password"].encode()).hexdigest()
     user = User(name=data["name"], email=data["email"], password=hashed_password)
 
+
+
     try:
         UserRepository.create(user)
         return jsonify({"message": "User created successfully"}), 201
