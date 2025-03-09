@@ -21,3 +21,12 @@ class UserRepository:
             row = cursor.fetchone()
         connection.close()
         return User(*row) if row else None
+
+    @staticmethod
+    def delete(user):
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "DELETE FROM users WHERE id = %s"
+            cursor.execute(sql, (user.id,))
+            connection.commit()
+        connection.close()
