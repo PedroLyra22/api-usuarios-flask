@@ -24,6 +24,18 @@ class UserRepository:
         return User(*row) if row else None
 
     @staticmethod
+    def find_all():
+        connection = get_db_connection()
+        users = []
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM users"
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+        connection.close()
+
+        return [User(*row) for row in rows] if rows else []
+
+    @staticmethod
     def delete(user):
         connection = get_db_connection()
         with connection.cursor() as cursor:
