@@ -34,8 +34,7 @@ def delete_user(user_id):
     user = UserRepository.find_by_id(user_id)
 
     if user:
-        UserRepository.delete(user)
-        return 200
+        return UserRepository.delete(user)
     return jsonify({"error": "User not found"}), 404
 
 if __name__ == '__main__':
