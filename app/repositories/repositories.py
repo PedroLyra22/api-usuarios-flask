@@ -1,5 +1,6 @@
 from config import get_db_connection
 from app.models.models import User
+from flask import jsonify
 
 
 class UserRepository:
@@ -21,3 +22,14 @@ class UserRepository:
             row = cursor.fetchone()
         connection.close()
         return User(*row) if row else None
+
+    @staticmethod
+    def delete(user):
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = f"DELETE FROM users WHERE id = {user.id}"
+            cursor.execute(sql)
+            connection.commit()
+        connection.close()
+
+        return jsonify({"message": "User deleted successfully"}), 200
