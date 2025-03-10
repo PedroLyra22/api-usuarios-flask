@@ -29,6 +29,11 @@ def get_user(user_id):
         return jsonify({"id": user.id, "name": user.name, "email": user.email}), 200
     return jsonify({"error": "User not found"}), 404
 
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    users = UserRepository.find_all()
+    return jsonify([user.__dict__ for user in users])
+
 @app.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = UserRepository.find_by_id(user_id)
