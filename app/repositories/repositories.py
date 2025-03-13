@@ -28,7 +28,7 @@ class UserRepository:
         connection = get_db_connection()
         users = []
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM users"
+            sql = "SELECT * FROM users LIMIT 25"
             cursor.execute(sql)
             rows = cursor.fetchall()
         connection.close()
