@@ -42,5 +42,15 @@ def delete_user(user_id):
         return UserRepository.delete(user)
     return jsonify({"error": "User not found"}), 404
 
+@app.route("/users/<int:user_id>", methods=["PATCH"])
+def update_user(user_id):
+    user = UserRepository.find_by_id(user_id)
+    data = request.json
+    user.email = data["email"]
+
+    if user:
+        return UserRepository.update(user)
+    return jsonify({"error": "User not found"}), 404
+
 if __name__ == '__main__':
     app.run(debug=True)
