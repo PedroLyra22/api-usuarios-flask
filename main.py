@@ -3,6 +3,8 @@ from app.repositories.repositories import UserRepository
 from app.models.models import User
 import hashlib
 
+from app.services.services import UserService
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -51,6 +53,19 @@ def update_user(user_id):
     if user:
         return UserRepository.update(user)
     return jsonify({"error": "User not found"}), 404
+
+@app.route('/login', methods=["POST"])
+def login():
+    data = request.json
+    login = data['email']
+    password = hashlib.sha256(data["password"].encode()).hexdigest()
+    user = UserRepository.find_by_email(login)
+
+    if user:
+        return UserService.check_login(user, login, password)
+    else:
+        return jsonify({"error": "User not found"}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
