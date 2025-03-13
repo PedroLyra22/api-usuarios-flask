@@ -45,3 +45,14 @@ class UserRepository:
         connection.close()
 
         return jsonify({"message": "User deleted successfully"}), 200
+
+    @staticmethod
+    def update(user):
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET email = %s WHERE id = %s"
+            cursor.execute(sql, (user.email, user.id))
+            connection.commit()
+        connection.close()
+
+        return jsonify({"message": "User update successfully"}), 200
