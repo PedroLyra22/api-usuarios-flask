@@ -24,6 +24,16 @@ class UserRepository:
         return User(*row) if row else None
 
     @staticmethod
+    def find_by_email(user_email):
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            sql = "SELECT * FROM users WHERE email = %s"
+            cursor.execute(sql, (user_email,))
+            row = cursor.fetchone()
+        connection.close()
+        return User(*row) if row else None
+
+    @staticmethod
     def find_all():
         connection = get_db_connection()
         users = []
@@ -56,3 +66,4 @@ class UserRepository:
         connection.close()
 
         return jsonify({"message": "User update successfully"}), 200
+
