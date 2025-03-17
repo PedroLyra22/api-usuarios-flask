@@ -1,4 +1,4 @@
-from flask import jsonify
+import json
 
 class UserService:
     @staticmethod
@@ -6,7 +6,10 @@ class UserService:
         check_login = user.email == login
         check_password = user.password == password
 
+        login = {'user':json.dumps(user.__dict__), 'check':False}
+
         if check_login and check_password:
-            return jsonify({"message": "Login and password ok"}), 200
+            login['check'] = True
+            return login
         else:
-            return jsonify({"message": "Login and password dont match"}), 403
+            return login
