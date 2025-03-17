@@ -1,11 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from app.repositories.repositories import UserRepository
 from app.models.models import User
 import hashlib
-
+import os
+import json
+from dotenv import load_dotenv
 from app.services.services import UserService
 
+load_dotenv()
+
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route('/')
 def home():
@@ -62,9 +67,26 @@ def login():
     user = UserRepository.find_by_email(login)
 
     if user:
-        return UserService.check_login(user, login, password)
+        response = UserService.check_login(user, login, password)
+
+        if response['check']:
+            session["user"] = response['user']
+            return jsonify({"message": "Login and password ok"}), 200
+
+        else:
+            return jsonify({"message": "Login and password dont match"}), 403
     else:
         return jsonify({"error": "User not found"}), 404
+
+@app.route("/perfil")
+def perfil():
+    usuario_json = session.get("user")
+
+    if usuario_json:
+        usuario = json.loads(usuario_json)
+        return jsonify({"name": usuario.get("name")})
+
+    return jsonify({"erro": "Nenhum usuário logado"}), 401
 
 
 if __name__ == '__main__':
